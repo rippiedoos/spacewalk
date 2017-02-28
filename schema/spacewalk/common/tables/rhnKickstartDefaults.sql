@@ -37,6 +37,10 @@ CREATE TABLE rhnKickstartDefaults
                              DEFAULT ('N') NOT NULL
                              CONSTRAINT rhn_ksd_rmf_ck
                                  CHECK (remote_command_flag in ('Y','N')),
+    upgrade_up2date_flag CHAR(1)
+                             DEFAULT ('Y') NOT NULL
+                             CONSTRAINT rhn_ksd_uu2df_ck
+                                 CHECK (upgrade_up2date_flag in ('Y','N')),
     virtualization_type  NUMBER NOT NULL
                              CONSTRAINT rhn_ksd_kvt_fk
                                  REFERENCES rhnKickstartVirtualizationType (id)
