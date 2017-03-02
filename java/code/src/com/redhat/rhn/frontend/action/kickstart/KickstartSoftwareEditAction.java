@@ -68,6 +68,7 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
     public static final String RED_HAT_TREES_AVAILABLE = "redHatTreesAvailable";
     public static final String USING_NEWEST = "usingNewest";
     public static final String USING_NEWEST_RH = "usingNewestRH";
+    public static final String UPGRADE_UP2DATE = "upgradeUp2date";
     @Override
     protected String getSuccessKey() {
         return "kickstart.software.success";
@@ -172,6 +173,7 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
             ctx.getRequest().setAttribute("nourl", "true");
         }
         setupRepos(ctx, form, cmd.getKickstartData(), selectedTree);
+	setupUpgradeUp2dateFlag(form, cmd.getKickstartData());
     }
 
     private void setupChildChannels(RequestContext ctx, Long channelId,
@@ -295,6 +297,8 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
         String[] childchannelIds = request.getParameterValues(CHILD_CHANNELS);
         cmd.updateChildChannels(childchannelIds);
 
+	processUpgradeUp2dateFlag(form, cmd);
+
         if (ve != null) {
             return ve;
         }
@@ -323,6 +327,23 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
             form.set(SELECTED_REPOS, items);
         }
     }
+
+    private void setupUpgradeUp2dateFlag(DynaActionForm form, KickstartData ksdata) {
+        if (ksdata.shouldUpgradeUp2date()) {
+            form.set(UPGRADE_UP2DATE, "on");
+        }
+        else {
+            form.set(UPGRADE_UP2DATE, null);
+        }
+    }
+
+    private void processUpgradeUp2dateFlag(DynaActionForm form,
+					   KickstartEditCommand command) {
+        command.enableUp2dateUpgrade(BooleanUtils.toBoolean(form
+                .getString(UPGRADE_UP2DATE)));
+
+    }
+
 
     /**
      * {@inheritDoc}

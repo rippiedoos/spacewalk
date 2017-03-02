@@ -384,4 +384,18 @@ public class KickstartEditCommand extends BaseKickstartCommand {
             ksHelper.processSkipKey(ksdata);
         }
     }
+
+    /**
+     * Enables up2date upgrade flag in this profile
+     * @param enable true to enable upgrading up2date, false to disable upgrading up2date.
+     */
+    public void enableUp2dateUpgrade(boolean enable) {
+        KickstartDefaults defaults = ksdata.getKickstartDefaults();
+        if (defaults == null) {
+            defaults = new KickstartDefaults();
+            defaults.setCreated(new Date());
+        }
+        defaults.setUpgradeUp2dateFlag(enable);
+    }
+
 }

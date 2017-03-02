@@ -9286,6 +9286,18 @@ Please note that some manual configuration of these scripts may still be require
           <context context-type="sourcefile">/rhn/kickstart/KickstartSoftwareEdit</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="softwareedit.jsp.upgradeUp2date">
+        <source>Upgrade Up2date</source>
+        <context-group name="ctx">
+          <context context-type="sourcefile">/rhn/kickstart/KickstartSoftwareEdit</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="kickstart.jsp.upgradeUp2date.msg">
+        <source>During Kickstart, upgrade the up2date packages included in the Distribution Tree.</source>
+        <context-group name="ctx">
+          <context context-type="sourcefile">/rhn/kickstart/CreateProfileWizard.do</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="kickstart.cryptokeys.jsp.submit">
         <source>Update keys</source>
         <context-group name="ctx">

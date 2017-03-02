@@ -1364,6 +1364,15 @@ public class KickstartData {
     }
 
     /**
+     * True if upgrade up2date flag is enabled in this profile
+     * @return True if upgrade up2date flag is enabled in this profile
+     */
+    public boolean shouldUpgradeUp2date() {
+        return getKickstartDefaults() != null &&
+                getKickstartDefaults().getUpgradeUp2dateFlag();
+    }
+
+    /**
      * @return the cobblerName
      */
     public String getCobblerFileName() {

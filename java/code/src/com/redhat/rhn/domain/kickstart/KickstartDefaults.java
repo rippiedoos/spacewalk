@@ -31,6 +31,7 @@ public class KickstartDefaults {
     private Long id;
     private Boolean cfgManagementFlag;
     private Boolean remoteCommandFlag;
+    private Boolean upgradeUp2dateFlag;
     private KickstartVirtualizationType virtualizationType;
     private Date created;
     private Date modified;
@@ -114,6 +115,22 @@ public class KickstartDefaults {
     */
     public void setRemoteCommandFlag(Boolean remoteCommandFlagIn) {
         this.remoteCommandFlag = remoteCommandFlagIn;
+    }
+
+    /**
+     * Getter for upgradeUp2dateFlag
+     * @return Boolean to get
+    */
+    public Boolean getUpgradeUp2dateFlag() {
+        return this.upgradeUp2dateFlag;
+    }
+
+    /**
+     * Setter for upgradeUp2dateFlag
+     * @param upgradeUp2dateFlagIn to set
+    */
+    public void setUpgradeUp2dateFlag(Boolean upgradeUp2dateFlagIn) {
+        this.upgradeUp2dateFlag = upgradeUp2dateFlagIn;
     }
 
     /**

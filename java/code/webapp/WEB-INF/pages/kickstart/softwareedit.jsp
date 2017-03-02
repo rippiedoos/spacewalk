@@ -38,6 +38,15 @@ function clickNewestTree() {
        form.useNewestRHTree.checked = false;
    }
 }
+
+function clickUpgradeUp2date() {
+     var form = document.getElementsByName("kickstartSoftwareForm")[0];
+     if (form.upgradeUp2date.checked) {
+	 form.upgradeUp2date.checked = false;
+     }
+}
+
+}
 //-->
 </script>
 </head>
@@ -156,7 +165,18 @@ function clickNewestTree() {
     <br/><rhn:tooltip key="softwareedit.jsp.repos-tooltip"/>
             </td>
           </tr>
-         </c:if>
+          </c:if>
+
+	  <tr>
+	      <th><bean:message key="softwareedit.jsp.upgradeUp2date" />:</th>
+	      <td>
+		  <input type="checkbox" name="upgradeUp2date" value="0"
+			 onclick="clickUpgradeUp2date()"
+		  <c:if test="${upgradeUp2date == true}">checked=1</c:if> />
+		  <bean:message key="kickstart.jsp.upgradeUp2date.msg" />
+	      </td>
+	  </tr>
+
           <tr>
             <td align="right" colspan="2"><html:submit styleClass="btn btn-default"><bean:message key="kickstartdetails.jsp.updatekickstart"/></html:submit></td>
           </tr>
