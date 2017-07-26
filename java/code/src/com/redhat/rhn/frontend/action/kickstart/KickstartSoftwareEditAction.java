@@ -174,7 +174,7 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
             ctx.getRequest().setAttribute("nourl", "true");
         }
         setupRepos(ctx, form, cmd.getKickstartData(), selectedTree);
-	setupUpgradeUp2dateFlag(form, cmd.getKickstartData());
+        setupUpgradeUp2dateFlag(form, cmd.getKickstartData());
     }
 
     private void setupChildChannels(RequestContext ctx, Long channelId,
@@ -298,7 +298,7 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
         String[] childchannelIds = request.getParameterValues(CHILD_CHANNELS);
         cmd.updateChildChannels(childchannelIds);
 
-	processUpgradeUp2dateFlag(form, cmd);
+        processUpgradeUp2dateFlag(form, cmd);
 
         if (ve != null) {
             return ve;
@@ -339,7 +339,7 @@ public class KickstartSoftwareEditAction extends BaseKickstartEditAction {
     }
 
     private void processUpgradeUp2dateFlag(DynaActionForm form,
-					   KickstartEditCommand command) {
+                                           KickstartEditCommand command) {
         command.enableUp2dateUpgrade(BooleanUtils.toBoolean(form
                 .getString(UPGRADE_UP2DATE)));
 

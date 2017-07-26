@@ -680,14 +680,14 @@ public class KickstartFormatter {
         List<ActivationKey> tokens = generateActKeyTokens(this.ksdata,
                 this.session);
 
-	HashSet updatePackages = new HashSet();
+        HashSet updatePackages = new HashSet();
         boolean isUpdate = false;
-	if (this.ksdata.getKickstartDefaults().getUpgradeUp2dateFlag()) {
-	    updatePackages = getUpdatePackages(tokens);
-	    isUpdate = updatePackages.size() > 0;
-	}
+        if (this.ksdata.getKickstartDefaults().getUpgradeUp2dateFlag()) {
+            updatePackages = getUpdatePackages(tokens);
+            isUpdate = updatePackages.size() > 0;
+        }
 
-	HashSet freshPackages = getFreshPackages(tokens);
+        HashSet freshPackages = getFreshPackages(tokens);
         boolean isFresh = freshPackages.size() > 0;
 
         // update the required/optional packages needed for the kickstart
