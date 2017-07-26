@@ -33,6 +33,7 @@ import com.redhat.rhn.manager.kickstart.cobbler.CobblerProfileEditCommand;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.util.LabelValueBean;
+import org.apache.commons.lang.BooleanUtils;
 import org.cobbler.Distro;
 
 import java.util.Collection;
