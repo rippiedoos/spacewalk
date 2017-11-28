@@ -24,7 +24,7 @@ class rhncfgConfigParser(ConfigParser.ConfigParser):
     _local_config_file_name = '.rhncfgrc'
     _instance = None
 
-    def __init__(self, section, defaults=None):
+    def __init__(self, section, defaults=None, config_file_override=None):
         """defaults is either None, or a dictionary of default values which can be overridden"""
         if defaults:
             for (k, v) in defaults.iteritems():
@@ -34,6 +34,7 @@ class rhncfgConfigParser(ConfigParser.ConfigParser):
         self.section = section
         self.overrides = {}
         self.mydefaults = self.defaults()
+        self.config_file_override = config_file_override
 
     def read_config_files(self, overrides={}):
         self.overrides.clear()
@@ -47,18 +48,21 @@ class rhncfgConfigParser(ConfigParser.ConfigParser):
             sys.exit(1)
 
     def _get_config_files(self):
-        if string.find(sys.platform, 'sunos') > -1:
-            return [
-                "/opt/redhat/rhn/solaris/etc/sysconfig/rhn/%s.conf" % self.section,
-                os.path.join(utils.get_home_dir(), self._local_config_file_name),
-                self._local_config_file_name,
-            ]
+        if sys.platform.find('sunos') > -1:
+            default_config_file = "/opt/redhat/rhn/solaris/etc/sysconfig/rhn/%s.conf" % self.section
         else:
-            return [
-                "/etc/sysconfig/rhn/%s.conf" % self.section,
-                os.path.join(utils.get_home_dir(), self._local_config_file_name),
-                self._local_config_file_name,
-            ]
+            default_config_file = "/etc/sysconfig/rhn/%s.conf" % self.section
+
+        config_file_list = [
+            default_config_file,
+            os.path.join(utils.get_home_dir(), self._local_config_file_name),
+            self._local_config_file_name,
+        ]
+
+        if self.config_file_override:
+            config_file_list.append(self.config_file_override)
+
+        return config_file_list
 
     def get_option(self, option):
         #6/29/05 wregglej 152388
@@ -98,8 +102,8 @@ class rhncfgConfigParser(ConfigParser.ConfigParser):
     def __getitem__(self, item):
         return self.get_option(item)
 
-def init(section, defaults=None, **overrides):
-    cp = rhncfgConfigParser._instance = rhncfgConfigParser(section, defaults)
+def init(section, defaults=None, config_file_override=None, **overrides):
+    cp = rhncfgConfigParser._instance = rhncfgConfigParser(section, defaults, config_file_override=config_file_override)
     cp.read_config_files(overrides)
 
 def get(var):
