@@ -27,6 +27,7 @@ use DBI ();
 use Digest::SHA qw/sha256_hex/;
 use DateTime ();
 use Sys::Hostname ();
+use Net::Domain ();
 use Spacewalk::Setup ();
 use Fcntl qw(F_GETFD F_SETFD FD_CLOEXEC);
 use IO::Socket ();
@@ -51,6 +52,9 @@ push @skip, Spacewalk::Setup::EMBEDDED_DB_ANSWERS
 Spacewalk::Setup::load_answer_file(\%opts, \%answers, \@skip);
 my $product_name = $answers{'product_name'} || 'Spacewalk';
 
+# Try to get the FQDN or SSL verification will likely fail.
+# Fallback to shortname
+$answers{hostname} ||= Net::Domain::hostfqdn;
 $answers{hostname} ||= Sys::Hostname::hostname;
 
 if (not defined $opts{"clear-db"} and defined $answers{"clear-db"} and
