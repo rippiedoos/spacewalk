@@ -27,7 +27,9 @@ my $help = 0;
 
 # Try to get the FQDN or SSL verification will likely fail.
 # Fallback to shortname
-my $hostname ||= Net::Domain::hostfqdn();
+# Net::Domain::hostfqdn() is broken. Use hostname command instead.
+my $hostname ||= `hostname --fqdn`;
+chomp($hostname);
 $hostname ||= Sys::Hostname::hostname(),
 
 my %macros = ('hostname' => $hostname,
