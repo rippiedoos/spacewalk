@@ -42,6 +42,7 @@ type spacewalk_initrc_exec_t;
 domain_entry_file(initrc_t, spacewalk_initrc_exec_t)
 
 allow tomcat_t self:netlink_audit_socket { nlmsg_relay read write create };
+allow tomcat_t spacewalk_log_t:file { open read };
 
 optional_policy(`
 	gen_require(`
