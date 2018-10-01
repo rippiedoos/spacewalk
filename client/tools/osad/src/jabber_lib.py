@@ -26,8 +26,10 @@ import traceback
 from rhn import SSL
 
 try: # python 2
+    from cStringIO import StringIO
     from rhn_log import log_debug, log_error
 except ImportError: # python 3
+    from io import StringIO
     from osad.rhn_log import log_debug, log_error
 
 from spacewalk.common.usix import raise_with_tb
@@ -1524,7 +1526,9 @@ def strip_resource(jid):
     return jid.getStripped()
 
 def extract_traceback():
-    return traceback.format_exc(None)
+    sio = StringIO()
+    traceback.print_exc(None, sio)
+    return sio.getvalue()
 
 class Sendall:
     """This class exists here because python 1.5.2 does not support a
