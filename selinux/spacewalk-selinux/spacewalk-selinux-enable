@@ -50,6 +50,7 @@ for selinuxvariant in mls strict targeted
 /usr/sbin/setsebool -P httpd_can_network_connect 1
 /usr/sbin/setsebool -P httpd_can_sendmail 1
 /usr/sbin/setsebool -P tomcat_read_rpm_db 1
+/usr/sbin/setsebool -P tomcat_can_network_connect_db 1
 /usr/sbin/setsebool -P nis_enabled 1
 
 if [ -z "$RUN_PURE" ] ; then
