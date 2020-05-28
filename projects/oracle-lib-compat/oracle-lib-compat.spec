@@ -1,5 +1,5 @@
 Name:           oracle-lib-compat
-Version:        11.2.0.16
+Version:        18.5.0.0
 Release:        1%{?dist}
 Summary:        Compatibility package so that perl-DBD-Oracle will install
 License:        GPLv2
@@ -20,11 +20,11 @@ Requires:       oracle-instantclient-basic = %{icversion}
 Requires:       oracle-instantclient-sqlplus = %{icversion}
 %define soversion 10
 %else
-%define icversion 11.2.0.4.0
-%define icdir 11.2
-Requires:       oracle-instantclient11.2-basic = %{icversion}
-Requires:       oracle-instantclient11.2-sqlplus = %{icversion}
-%define soversion 11
+%define icversion 18.5.0.0.0
+%define icdir 18.5
+Requires:       oracle-instantclient18.5-basic = %{icversion}
+Requires:       oracle-instantclient18.5-sqlplus = %{icversion}
+%define soversion 18
 %endif
 
 Requires(post): ldconfig
@@ -70,11 +70,11 @@ ln -s ../%{_lib}/oracle/%{icdir}/client/bin/sqlplus $RPM_BUILD_ROOT%{_bindir}/sq
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/oracle/%{icdir}
 ln -s ../../../lib/oracle/%{icdir}/client64 $RPM_BUILD_ROOT%{_libdir}/oracle/%{icdir}/client
 
-mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client64/lib/network/admin
-echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client64/lib/network/admin/sqlnet.ora
+mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client64/lib/network/admin
+echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client64/lib/network/admin/sqlnet.ora
 %else
-mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client/lib/network/admin
-echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client/lib/network/admin/sqlnet.ora
+mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client/lib/network/admin
+echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client/lib/network/admin/sqlnet.ora
 %endif
 
 mkdir -p $RPM_BUILD_ROOT/%{_javadir}
@@ -86,9 +86,10 @@ ln -s ../../%{_lib}/oracle/%{icdir}/client/lib/ojdbc6.jar $RPM_BUILD_ROOT/%{_jav
 %ifarch x86_64 s390x
 %{_bindir}/sqlplus
 %{_libdir}/oracle
-/usr/lib/oracle/11.2/client64/lib/network/admin/sqlnet.ora
+/usr/lib/oracle/18.5/client64/lib/network/admin/sqlnet.ora
+/usr/lib/oracle/18.5/client64/lib/network/admin/sqlnet.ora
 %else
-/usr/lib/oracle/11.2/client/lib/network/admin/sqlnet.ora
+/usr/lib/oracle/18.5/client/lib/network/admin/sqlnet.ora
 %endif
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/oracle-instantclient-%{icdir}.conf
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/oracle-xe.conf
@@ -103,6 +104,9 @@ find %{_prefix}/lib/oracle/%{icdir} \
         | xargs execstack -c
 
 %changelog
+* Thu 28 May 2020 Laurence Rochfort <laurence.rochfort@oracle.com> 18.5.0.0-1
+- Update instant client to 18.5 [Orabug: 31413086]
+
 * Fri Feb 09 2018 Michael Mraka <michael.mraka@redhat.com> 11.2.0.16-1
 - remove install/clean section initial cleanup
 - removed Group from specfile

@@ -756,8 +756,13 @@ fi
 %{_prefix}/share/rhn/search/lib/postgresql-jdbc.jar
 
 %changelog
+
 * Wed Mar 11 2020 Michael Mraka <michael.mraka@redhat.com> 2.10.19-1
 - 1791111 - improved performance of cleanup-data-bunch
+
+* Thu 28 May 2020 Laurence Rochfort <laurence.rochfort@oracle.com> 2.10.18-1
+- Update taskomatic to use instant client to 18.5 [Orabug: 31413086]
+- Update supported Oracle DB and Instant Client versions.
 
 * Thu Feb 27 2020 Michael Mraka <michael.mraka@redhat.com> 2.10.18-1
 - fixed checkstyle header
