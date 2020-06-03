@@ -78,7 +78,7 @@ echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client/lib/n
 %endif
 
 mkdir -p $RPM_BUILD_ROOT/%{_javadir}
-ln -s ../../%{_lib}/oracle/%{icdir}/client/lib/ojdbc6.jar $RPM_BUILD_ROOT/%{_javadir}/ojdbc14.jar
+ln -s ../../%{_lib}/oracle/%{icdir}/client/lib/ojdbc8.jar $RPM_BUILD_ROOT/%{_javadir}/ojdbc14.jar
 
 %clean
 
