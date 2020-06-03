@@ -70,11 +70,11 @@ ln -s ../%{_lib}/oracle/%{icdir}/client/bin/sqlplus $RPM_BUILD_ROOT%{_bindir}/sq
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/oracle/%{icdir}
 ln -s ../../../lib/oracle/%{icdir}/client64 $RPM_BUILD_ROOT%{_libdir}/oracle/%{icdir}/client
 
-mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client64/lib/network/admin
-echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client64/lib/network/admin/sqlnet.ora
+mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client64/lib/network/admin
+echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client64/lib/network/admin/sqlnet.ora
 %else
 mkdir -p $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client/lib/network/admin
-echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/11.2/client/lib/network/admin/sqlnet.ora
+echo 'diag_adr_enabled = off' > $RPM_BUILD_ROOT/usr/lib/oracle/18.5/client/lib/network/admin/sqlnet.ora
 %endif
 
 mkdir -p $RPM_BUILD_ROOT/%{_javadir}
