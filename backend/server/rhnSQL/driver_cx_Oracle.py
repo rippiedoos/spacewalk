@@ -139,7 +139,10 @@ class Cursor(sql_base.Cursor):
 
         if self.blob_map:
             for blob_var, content in blob_content.items():
-                kw[blob_var].getvalue().write(content)
+                # Separate declaration and assignment to avoid missing write() and __item__ errors
+                # Orabug 31589572
+                lob = kw[blob_var].getvalue()
+                lob[0].write(content)
         # Munge back the values
         self._unmunge_args(kw, modified_params)
         return retval
