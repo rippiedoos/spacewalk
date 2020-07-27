@@ -105,15 +105,17 @@ public abstract class BaseSystemPackagesAction extends RhnAction {
         ListTagHelper.bindSetDeclTo(LIST_NAME, getDecl(sid), request);
         TagHelper.bindElaboratorTo(LIST_NAME, dataSet.getElaborator(), request);
 
-        boolean hasModules = false;
-        for (Channel channel : server.getChannels()) {
-            if (channel.getModules() != null) {
-                hasModules = true;
-                break;
+        if (!request.getRequestURI().toLowerCase().contains("upgradablelist")) {
+            boolean hasModules = false;
+            for (Channel channel : server.getChannels()) {
+                if (channel.getModules() != null) {
+                    hasModules = true;
+                    break;
+                }
             }
-        }
-        if (hasModules) {
-            addMessage(request, "packagelist.jsp.modulespresent");
+            if (hasModules) {
+                addMessage(request, "packagelist.jsp.modulespresent");
+            }
         }
         return mapping.findForward(RhnHelper.DEFAULT_FORWARD);
     }

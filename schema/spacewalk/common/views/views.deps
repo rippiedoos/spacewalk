@@ -47,7 +47,8 @@ rhnServerGroupOVLiteHelper       :: rhnServerNeededPackageCache rhnErrata \
 rhnServerModulesView             :: rhnServerPackage rhnPackageEVR rhnPackage \
                                     rhnErrataPackage rhnErrata
 rhnServerOutdatedPackages        :: rhnServerNeededCache rhnErrata \
-                                    rhnPackageName rhnPackageEVR rhnPackage
+                                    rhnPackageName rhnPackageEVR rhnPackage \
+                                    rhnServerModulesView
 rhnStorageDevice                 :: rhnDevice
 rhnUserChannel                   :: rhn_channel.pks rhnChannelFamilyMembers \
                                     rhnUserChannelFamilyPerms web_contact
