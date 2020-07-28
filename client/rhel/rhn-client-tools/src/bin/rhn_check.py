@@ -31,6 +31,7 @@
 
 import base64
 import os
+import re
 import sys
 import socket
 
@@ -104,12 +105,23 @@ class CheckCli(rhncli.RhnCli):
 
         self.__run_remote_actions()
         CheckCli.__run_local_actions()
+        self.__public_yum_actions()
 
         s = rhnserver.RhnServer()
         if s.capabilities.hasCapability('staging_content', 1) and cfg['stagingContent'] != 0:
              self.__check_future_actions()
 
         sys.exit(0)
+
+    def __public_yum_actions(self):
+        for root, dir, files in os.walk("/etc/yum.repos.d/"):
+            for file in files:
+                if file.endswith("ol8.repo"):
+                    file = os.path.join(root, file)
+                    file_t = open (file)
+                    file_text = file_t.read()
+                    if re.search("baseurl=.*yum.*oracle.com", file_text):
+                        os.system("sed -i 's/enabled=1/enabled=0/' %s" % file)
 
     def __get_action(self, status_report):
         try:
