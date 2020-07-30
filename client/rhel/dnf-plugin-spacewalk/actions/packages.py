@@ -267,6 +267,10 @@ def verify(packages, cache_only=None):
 def _dnf_base(load_system_repo=True, load_available_repos=True):
     # initialize dnf
     base = dnf.Base()
+    # Orabug 31689877
+    # Populate subsitution vars found in /etc/dnf/vars
+    # Needed to make $ociregion decoding in local OCI repo URLs work
+    base.conf.substitutions.update_from_etc("/")
 
     if not base._plugins.plugins:
         base.init_plugins()
