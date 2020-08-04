@@ -38,17 +38,17 @@ from up2date_client import up2dateErrors
 
 STORED_CHANNELS_NAME = '_spacewalk.json'
 
-RHN_DISABLED    = _("Spacewalk based repositories will be disabled.")
-CHANNELS_DISABLED = _("Spacewalk channel support will be disabled.")
-COMMUNICATION_ERROR  = _("There was an error communicating with Spacewalk server.")
-NOT_REGISTERED_ERROR = _("This system is not registered with Spacewalk server.")
+RHN_DISABLED    = _("Unbreakable Linux Network or Spacewalk based repositories will be disabled.")
+CHANNELS_DISABLED = _("Unbreakable Linux Network or Spacewalk channel support will be disabled.")
+COMMUNICATION_ERROR  = _("There was an error communicating with Unbreakable Linux Network or Spacewalk.")
+NOT_REGISTERED_ERROR = _("This system is not registered with Unbreakable Linux Network or Spacewalk.")
 NOT_SUBSCRIBED_ERROR = _("This system is not subscribed to any channels.")
 NO_SYSTEM_ID_ERROR   = _("SystemId could not be acquired.")
 USE_RHNREGISTER      = _("You can use rhn_register to register.")
-UPDATES_FROM_SPACEWALK = _("This system is receiving updates from Spacewalk server.")
-GPG_KEY_REJECTED     = _("For security reasons packages from Spacewalk based repositories can be verified only with locally installed gpg keys. GPG key '%s' has been rejected.")
+UPDATES_FROM_SPACEWALK = _("This system is receiving updates from Unbreakable Linux Network or Spacewalk.")
+GPG_KEY_REJECTED     = _("For security reasons packages from Unbreakable Linux Network or Spacewalk based repositories can be verified only with locally installed gpg keys. GPG key '%s' has been rejected.")
 PROFILE_NOT_SENT     = _("Package profile information could not be sent.")
-MISSING_HEADER       = _("Missing required login information for Spacewalk: %s")
+MISSING_HEADER       = _("Missing required login information for Unbreakable Linux Network or Spacewalk: %s")
 MUST_BE_ROOT         = _('Spacewalk plugin has to be run under with the root privileges.')
 
 class Spacewalk(dnf.Plugin):
