@@ -14,22 +14,22 @@
 --
 insert into rhnKSInstallType (id, label, name)
         values (sequence_nextval('rhn_ksinstalltype_id_seq'),
-                'rhel_8','Red Hat Enterprise Linux 8'
+                'rhel_8','Oracle Linux 8/Red Hat Enterprise Linux 8'
         );
 
 insert into rhnKSInstallType (id, label, name)
         values (sequence_nextval('rhn_ksinstalltype_id_seq'),
-                'rhel_7','Red Hat Enterprise Linux 7'
+                'rhel_7','Oracle Linux 7/Red Hat Enterprise Linux 7'
         );
 
 insert into rhnKSInstallType (id, label, name)
         values (sequence_nextval('rhn_ksinstalltype_id_seq'),
-                'rhel_6','Red Hat Enterprise Linux 6'
+                'rhel_6','Oracle Linux 6/Red Hat Enterprise Linux 6'
         );
 
 insert into rhnKSInstallType (id, label, name)
         values (sequence_nextval('rhn_ksinstalltype_id_seq'),
-                'rhel_5','Red Hat Enterprise Linux 5'
+                'rhel_5','Oracle Linux 5/Red Hat Enterprise Linux 5'
         );
 
 insert into rhnKSInstallType (id, label, name)
