@@ -2867,29 +2867,7 @@ public class SystemHandler extends BaseHandler {
      */
     public List<Long> scheduleApplyErrata(User loggedInUser, List<Integer> serverIds,
             List<Integer> errataIds) {
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, null, false);
-    }
-
-    /**
-     * Schedules an action to apply errata updates to multiple systems.
-     * @param loggedInUser The current user
-     * @param serverIds List of server IDs to apply the errata to (as Integers)
-     * @param errataIds List of errata IDs to apply (as Integers)
-     * @param allowModules Allow this API call, despite modular content being present
-     * @return list of action ids, exception thrown otherwise
-     * @since 21
-     *
-     * @xmlrpc.doc Schedules an action to apply errata updates to multiple systems.
-     * @xmlrpc.param #param("string", "sessionKey")
-     * @xmlrpc.param #array_single("int", "serverId")
-     * @xmlrpc.param #array_single("int", "errataId")
-     * @xmlrpc.param #param_desc("boolean", "allowModules",
-     *          "Allow this API call, despite modular content being present")
-     * @xmlrpc.returntype #array_single("int", "actionId")
-     */
-    public List<Long> scheduleApplyErrata(User loggedInUser, List<Integer> serverIds,
-                                          List<Integer> errataIds, Boolean allowModules) {
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, null, allowModules);
+        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, null);
     }
 
     /**
@@ -2912,50 +2890,10 @@ public class SystemHandler extends BaseHandler {
     public List<Long> scheduleApplyErrata(User loggedInUser, List<Integer> serverIds,
             List<Integer> errataIds, Date earliestOccurrence) {
 
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, earliestOccurrence, false);
-    }
-
-    /**
-     * Schedules an action to apply errata updates to multiple systems at a specified time.
-     * @param loggedInUser The current user
-     * @param serverIds List of server IDs to apply the errata to (as Integers)
-     * @param errataIds List of errata IDs to apply (as Integers)
-     * @param earliestOccurrence Earliest occurrence of the errata update
-     * @param allowModules Allow this API call, despite modular content being present
-     * @return list of action ids, exception thrown otherwise
-     * @since 21
-     *
-     * @xmlrpc.doc Schedules an action to apply errata updates to multiple systems at a
-     * given date/time.
-     * @xmlrpc.param #param("string", "sessionKey")
-     * @xmlrpc.param #array_single("int", "serverId")
-     * @xmlrpc.param #array_single("int", "errataId")
-     * @xmlrpc.param dateTime.iso8601 earliestOccurrence
-     * @xmlrpc.param #param_desc("boolean", "allowModules",
-     *          "Allow this API call, despite modular content being present")
-     * @xmlrpc.returntype #array_single("int", "actionId")
-     */
-    public List<Long> scheduleApplyErrata(User loggedInUser, List<Integer> serverIds, List<Integer> errataIds,
-                                          Date earliestOccurrence, Boolean allowModules) {
-
         // we need long values to pass to ErrataManager.applyErrataHelper
         List<Long> longServerIds = new ArrayList<Long>();
         for (Iterator<Integer> it = serverIds.iterator(); it.hasNext();) {
-            Long sid = new Long(it.next());
-            if (!allowModules) {
-                boolean hasModules = false;
-                Server server = SystemManager.lookupByIdAndUser(new Long(sid.longValue()), loggedInUser);
-                for (Channel channel : server.getChannels()) {
-                    if (channel.getModules() != null) {
-                        hasModules = true;
-                        break;
-                    }
-                }
-                if (hasModules) {
-                    throw new ModulesNotAllowedException();
-                }
-            }
-            longServerIds.add(sid);
+            longServerIds.add(new Long(it.next()));
         }
 
         return ErrataManager.applyErrataHelper(loggedInUser,
@@ -2980,7 +2918,7 @@ public class SystemHandler extends BaseHandler {
     @Deprecated
     public int applyErrata(User loggedInUser, Integer sid,
             List<Integer> errataIds) {
-        scheduleApplyErrata(loggedInUser, sid, errataIds, false);
+        scheduleApplyErrata(loggedInUser, sid, errataIds);
         return 1;
     }
 
@@ -3003,32 +2941,7 @@ public class SystemHandler extends BaseHandler {
         List<Integer> serverIds = new ArrayList<Integer>();
         serverIds.add(sid);
 
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, false);
-    }
-
-    /**
-     * Schedules an action to apply errata updates to a system.
-     * @param loggedInUser The current user
-     * @param sid ID of the server
-     * @param errataIds List of errata IDs to apply (as Integers)
-     * @param allowModules Allow this API call, despite modular content being present
-     * @return list of action ids, exception thrown otherwise
-     * @since 21
-     *
-     * @xmlrpc.doc Schedules an action to apply errata updates to a system.
-     * @xmlrpc.param #param("string", "sessionKey")
-     * @xmlrpc.param #param("int", "serverId")
-     * @xmlrpc.param  #array_single("int", "errataId")
-     * @xmlrpc.param #param_desc("boolean", "allowModules",
-     *          "Allow this API call, despite modular content being present")
-     * @xmlrpc.returntype #array_single("int", "actionId")
-     */
-    public List<Long> scheduleApplyErrata(User loggedInUser, Integer sid, List<Integer> errataIds,
-                                          Boolean allowModules) {
-        List<Integer> serverIds = new ArrayList<Integer>();
-        serverIds.add(sid);
-
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, allowModules);
+        return scheduleApplyErrata(loggedInUser, serverIds, errataIds);
     }
 
     /**
@@ -3053,35 +2966,7 @@ public class SystemHandler extends BaseHandler {
         List<Integer> serverIds = new ArrayList<Integer>();
         serverIds.add(sid);
 
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, earliestOccurrence, false);
-    }
-
-    /**
-     * Schedules an action to apply errata updates to a system at a specified time.
-     * @param loggedInUser The current user
-     * @param sid ID of the server
-     * @param errataIds List of errata IDs to apply (as Integers)
-     * @param earliestOccurrence Earliest occurrence of the errata update
-     * @param allowModules Allow this API call, despite modular content being present
-     * @return list of action ids, exception thrown otherwise
-     * @since 21
-     *
-     * @xmlrpc.doc Schedules an action to apply errata updates to a system at a
-     * given date/time.
-     * @xmlrpc.param #param("string", "sessionKey")
-     * @xmlrpc.param #param("int", "serverId")
-     * @xmlrpc.param #array_single("int", "errataId")
-     * @xmlrpc.param dateTime.iso8601 earliestOccurrence
-     * @xmlrpc.param #param_desc("boolean", "allowModules",
-     *          "Allow this API call, despite modular content being present")
-     * @xmlrpc.returntype #array_single("int", "actionId")
-     */
-    public List<Long> scheduleApplyErrata(User loggedInUser, Integer sid, List<Integer> errataIds,
-                                          Date earliestOccurrence, Boolean allowModules) {
-        List<Integer> serverIds = new ArrayList<Integer>();
-        serverIds.add(sid);
-
-        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, earliestOccurrence, allowModules);
+        return scheduleApplyErrata(loggedInUser, serverIds, errataIds, earliestOccurrence);
     }
 
     /**
