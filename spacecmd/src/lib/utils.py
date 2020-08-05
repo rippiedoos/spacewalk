@@ -157,6 +157,15 @@ def filter_results(items, patterns, search=False):
     compiled_patterns = []
     for pattern in patterns:
         if search:
+            x = [s for s in items if pattern in s ]
+        else:
+            x = [s for s in items if pattern == s ]
+
+        if len(x) > 0:
+            matches.extend(x)
+            continue
+
+        if search:
             compiled_patterns.append(re.compile(pattern, re.I))
         else:
             # If in "match" mode, we don't want to match substrings
@@ -169,7 +178,7 @@ def filter_results(items, patterns, search=False):
             else:
                 result = pattern.match(item)
 
-            if result:
+            if result and items not in matches:
                 matches.append(item)
                 break
 
