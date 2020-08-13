@@ -1222,10 +1222,15 @@ def clone_channel(self, channel, options, details) :
     for key in to_remove:
         del details[key]
     logging.info("Cloning %s as %s" % (channel, details['label']))
-    self.client.channel.software.clone(self.session,
-                                       channel,
-                                       details,
-                                       options.original_state)
+
+    try:
+        self.client.channel.software.clone(self.session,
+                                           channel,
+                                           details,
+                                           options.original_state)
+    except xmlrpclib.Fault:
+        logging.error('Could not clone channel: %s' % channel)
+        return
 
 ###################
 

@@ -19,6 +19,7 @@ import com.redhat.rhn.domain.channel.Channel;
 import com.redhat.rhn.domain.channel.ChannelArch;
 import com.redhat.rhn.domain.channel.ChannelFactory;
 import com.redhat.rhn.domain.channel.ClonedChannel;
+import com.redhat.rhn.domain.channel.CopyModuleMetadataFileFailedException;
 import com.redhat.rhn.domain.common.ChecksumType;
 import com.redhat.rhn.frontend.xmlrpc.InvalidChannelLabelException;
 import com.redhat.rhn.frontend.xmlrpc.InvalidChannelNameException;
@@ -67,10 +68,12 @@ public class CloneChannelCommand extends CreateChannelCommand {
      * @throws IllegalArgumentException thrown if label, name or user are null.
      * @throws InvalidParentChannelException thrown if parent label is not a
      * valid base channel.
+     * @throws CopyModuleMetadataFileFailedException thrown on error copying modules.yaml file
+     *
      */
     public Channel create()
         throws InvalidChannelLabelException, InvalidChannelNameException,
-        InvalidParentChannelException {
+               InvalidParentChannelException, CopyModuleMetadataFileFailedException {
 
         ChannelArch ca = ChannelFactory.findArchByLabel(archLabel);
         ChecksumType ct = ChannelFactory.findChecksumTypeByLabel(checksum);
@@ -119,6 +122,8 @@ public class CloneChannelCommand extends CreateChannelCommand {
             ChannelFactory.cloneNewestPackageCache(original.getId(), c.getId());
             ErrataManager.cloneChannelErrata(original.getId(), c.getId(), user);
         }
+
+        ChannelManager.cloneChannelModulesFile(original, c);
 
         ChannelManager.queueChannelChange(c.getLabel(), "clonechannel", "cloned from " +
                 original.getLabel());

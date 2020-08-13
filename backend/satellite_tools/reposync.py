@@ -14,6 +14,7 @@
 # in this software or its documentation.
 #
 import os
+import stat
 import re
 import shutil
 import sys
@@ -630,6 +631,12 @@ class RepoSync(object):
         absdir = os.path.join(CFG.MOUNT_POINT, relativedir)
         if not os.path.exists(absdir):
             os.makedirs(absdir)
+        # Make modules dir group-writable so that Tomcat Java can copy modules files
+        if relative_dir == relative_modules_dir:
+            absmoddir = os.path.join(CFG.MOUNT_POINT, relative_dir)
+            st = os.stat(absmoddir)
+            if not bool(st.st_mode & stat.S_IWGRP):
+                os.chmod(absmoddir, 0o770)
         relativepath = os.path.join(relativedir, basename)
         abspath = os.path.join(absdir, basename)
         for suffix in ['.gz', '.bz', '.xz']:
