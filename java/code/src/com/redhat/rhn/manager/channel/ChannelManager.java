@@ -33,8 +33,10 @@ import com.redhat.rhn.domain.channel.ChannelFamily;
 import com.redhat.rhn.domain.channel.ChannelFamilyFactory;
 import com.redhat.rhn.domain.channel.ChannelVersion;
 import com.redhat.rhn.domain.channel.ClonedChannel;
+import com.redhat.rhn.domain.channel.CopyModuleMetadataFileFailedException;
 import com.redhat.rhn.domain.channel.DistChannelMap;
 import com.redhat.rhn.domain.channel.InvalidChannelRoleException;
+import com.redhat.rhn.domain.channel.Modules;
 import com.redhat.rhn.domain.channel.ProductName;
 import com.redhat.rhn.domain.channel.ReleaseChannelMap;
 import com.redhat.rhn.domain.errata.Errata;
@@ -72,6 +74,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
@@ -2604,5 +2608,52 @@ public class ChannelManager extends BaseManager {
         }
 
         return original.getParentChannel().getId();
+    }
+
+
+    /**
+     * Clone the modules metadata file for a channel. This will copy
+     * the file on disk and update the rhnChannelComps record.
+     * @param original Original channel to clone file from
+     * @param clone Channel to clone file into
+     * @throws CopyModuleMetadataFileFailedException thrown on error copying modules.yaml file
+     */
+    public static void cloneChannelModulesFile(Channel original, Channel clone)
+        throws CopyModuleMetadataFileFailedException {
+        // Have to reload to get modules
+        original = (Channel) ChannelFactory.reload(original);
+        clone = (Channel) ChannelFactory.reload(clone);
+
+        if (original.getModules() == null) {
+            return;
+        }
+
+        String originalRelativePath = original.getModules().getRelativeFilename();
+        String cloneRelativePath = originalRelativePath.replace(original.getLabel(), clone.getLabel());
+
+        String originalFQPath = Config.get().getString(ConfigDefaults.MOUNT_POINT) +
+            "/" + originalRelativePath;
+        String cloneFQPath =  Config.get().getString(ConfigDefaults.MOUNT_POINT) +
+                "/" + cloneRelativePath;
+
+        try {
+            File originalFile = new File(originalFQPath);
+            File cloneFile = new File(cloneFQPath);
+            Files.createDirectories(cloneFile.getParentFile().toPath());
+            Files.copy(originalFile.toPath(), cloneFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (Exception e) {
+            String errMsg = "Unable to clone modules.yaml for channel label: " + original.getLabel();
+            log.error(errMsg, e);
+            throw new CopyModuleMetadataFileFailedException(errMsg);
+        }
+
+        Modules cloneModules = clone.getModules();
+        if (cloneModules == null) {
+            cloneModules = new Modules();
+            cloneModules.setChannel(clone);
+        }
+        cloneModules.setRelativeFilename(cloneRelativePath);
+        clone.setModules(cloneModules);
     }
 }

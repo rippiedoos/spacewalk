@@ -28,6 +28,7 @@ import com.redhat.rhn.domain.channel.ChannelArch;
 import com.redhat.rhn.domain.channel.ChannelFactory;
 import com.redhat.rhn.domain.channel.ContentSource;
 import com.redhat.rhn.domain.channel.ContentSourceFilter;
+import com.redhat.rhn.domain.channel.CopyModuleMetadataFileFailedException;
 import com.redhat.rhn.domain.channel.InvalidChannelRoleException;
 import com.redhat.rhn.domain.errata.Errata;
 import com.redhat.rhn.domain.errata.ErrataFactory;
@@ -1961,7 +1962,8 @@ public class ChannelSoftwareHandler extends BaseHandler {
      *      string description (optional)
      * @param originalState if true, only the original packages of the channel to clone
      *          will be cloned.  Any updates will not be.
-     * @return int id of clone channel
+     * @throws CopyModuleMetadataFileFailedException thrown on error copying modules.yaml file
+     * @return int id of clone channel, exception thrown otherwise
      *
      * @xmlrpc.doc Clone a channel.  If arch_label is omitted, the arch label of the
      *      original channel will be used. If parent_label is omitted, the clone will be
