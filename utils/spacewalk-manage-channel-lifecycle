@@ -210,7 +210,8 @@ def merge_channels(source_label, dest_label):
         try:
             packages = client.channel.software.mergePackages(session,
                                                              source_label,
-                                                             dest_label)
+                                                             dest_label,
+                                                             True)
 
             logging.info('Added %i packages' % len(packages))
         except xmlrpclib.Fault, e:
@@ -231,8 +232,7 @@ def merge_channels(source_label, dest_label):
             try:
                 errata = client.channel.software.mergeErrata(session,
                                                              source_label,
-                                                             dest_label,
-                                                             True)
+                                                             dest_label)
 
                 logging.info('Added %i errata' % len(errata))
             except xmlrpclib.Fault, e:
