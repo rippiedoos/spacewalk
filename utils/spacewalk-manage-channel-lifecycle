@@ -40,6 +40,9 @@ class Config(object):
     SECTION_GENERAL = "general"
     OPT_PHASES = "phases"
     OPT_EXCLUDE_CHNL = "exclude channels"
+    OPT_USERNAME = "spw_user"
+    OPT_PASSWORD = "spw_pass"
+    OPT_SERVER = "spw_server"
 
     def __init__(self, path):
         self.path = path
@@ -103,6 +106,9 @@ def setup_config(config):
         logging.debug("Creating configuration file: %s" % USER_CONF_FILE)
         config.set(Config.SECTION_GENERAL, Config.OPT_PHASES, "dev, test, prod")
         config.set(Config.SECTION_GENERAL, Config.OPT_EXCLUDE_CHNL, "")
+        config.set(Config.SECTION_GENERAL, Config.OPT_USERNAME, "admin")
+        config.set(Config.SECTION_GENERAL, Config.OPT_PASSWORD, "")
+        config.set(Config.SECTION_GENERAL, Config.OPT_SERVER, gethostname())
         config.write()
     else:
         config.read()
@@ -384,7 +390,7 @@ option_list = [
     Option('-u', '--username', help='Spacewalk username'),
     Option('-p', '--password', help='Spacewalk password'),
     Option('-s', '--server',
-           help='Spacewalk server [default: %default]', default=gethostname()),
+           help='Spacewalk server [default: hostname]'),
     Option('-n', '--dry-run', help="don't perform any operations",
            action='store_true'),
     Option('-t', '--tolerant', help='be tolerant of errors',
@@ -454,6 +460,14 @@ if options.debug > 1:
 else:
     xmlrpc_debug = False
 
+# Fetch spw-server from config-file first
+if not options.server:
+    options.server = config.get(Config.SECTION_GENERAL, Config.OPT_SERVER)
+
+# If no options has been supplied, get own hostname
+if not options.server:
+    options.server = gethostname()
+
 # connect to the server
 client = xmlrpclib.Server('https://%s/rpc/api' % options.server,
                           verbose=xmlrpc_debug)
@@ -481,6 +495,12 @@ if os.path.exists(SESSION_CACHE):
         session = None
 
 if not session:
+    # If no username/password is supplied, get them from the config file
+    if not options.username:
+        options.username = config.get(Config.SECTION_GENERAL, Config.OPT_USERNAME)
+    if not options.password:
+        options.password = config.get (Config.SECTION_GENERAL, Config.OPT_PASSWORD)
+
     # prompt for the username
     if not options.username:
         while not options.username:
